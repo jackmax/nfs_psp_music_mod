@@ -12,7 +12,7 @@ The toolkit isn't complete:
 * To encode new tracks or replace existing tracks you need UMD Stream Composer. It's a proprietary tool, but you can find it quite easily.
 * You will also need UMDGen to unpack/edit UMD ISO files: [link 1](https://www.romhacking.net/utilities/1218/) or [link 2](https://www.psx-place.com/threads/umd-gen-4-00.10340/).
 
-# Functions
+## Functions
 * converts "trackinfo" file into a CSV file for editing
 * converts a CSV file into "trackinfo" file
 * converts any music file compatible with FFmpeg into .wav file for use with UMD Stream Composer
@@ -22,7 +22,7 @@ The toolkit isn't complete:
     * for now this simply copies and renames a file from the original game
     * this is just to keep playback in game's track browser from glitching
 
-# Workflow
+## Workflow
 Below I will explain how to add more tracks to your current game:
 * Make a folder and put `toolkit.py` and any new audio tracks you want to convert. You might want to rename them to something short and without spaces.
 * Drag and drop your music tracks into `toolkit.py`. They will be converted into specially named .wav files.
@@ -47,10 +47,10 @@ Below I will explain how to add more tracks to your current game:
 * Use UMDGen to replace the original `trackinfo` file, put all new .aud files into `eatrax` folder, put all new .dat files into `eavis/dat` folder, remove unused .aud and .dat files.
     * After doing your changes save the resulting file to ISO or CSO file
 
-# Notes on UMD Stream Composer
+## Notes on UMD Stream Composer
 The tool is very old and proprietary, so there are no updates available. It requires .NET Framework 1.1 to run, which is not supported on Windows 10 and seems to not work too well on Windows 7. Nowadays the only sensible way to run it is to do it in a Windows XP virtual machine. After installing Windows XP on a VM you have to install .NET Framework 1.1, otherwise you'll get a warning about missing .dll files. You may get a warning about DirectDraw device not supporting overlays. This is okay and the application should run despite this. If your program crashes after displaying this message, the DirectDraw device is not the problem.
 
-# Notes on encoding into ATRAC3plus
+## Notes on encoding into ATRAC3plus
 Music tracks have to be encoded into ATRAC3plus, not just ATRAC3 - and in some sort of specific way that the PSP can play.
 
 Encoding them into ATRAC3 **will work on an emulator** (specifically PPSSPP). In fact, simply renaming a regular PCM .wav file to .aud will work on that emulator. However, on a real console only converting to ATRAC3plus will work correctly.
@@ -62,10 +62,10 @@ I looked for alternatives to UMD Stream Composer, but there don't seem to be any
 * n•code by [Sonic Studio](https://sonicstudio.com/) can encode ATRAC3plus. But it is (was?) a proprietary tool, supposedly expensive. It might be lost to history, all I could find of it is a [PDF manual](https://www.sonicstudio.com/pdf/ncode/ncode_UserManual10.pdf) and [some web captures from 2004](http://web.archive.org/web/20040803015139/http://sonicstudio.com/products_ncode.htm).
 * There is an ACM codec for encoding into ATRAC3, but not ATRAC3plus. It works nicely for making custom tracks for GTA LCS/VCS on the PSP though.
 
-# `trackinfo` replacement in later games
+## `trackinfo` replacement in later games
 In these games the `trackinfo` stored directly in the ISO is not used. The file which is actually used sits packed and compressed inside `bundle/bootbundle.viv` file. The contents of these .viv files are loaded as an "overlay" over the actual files on the disc. I'm still working on some reasonable way to modify the file.
 
-## Proof-of-concept implementation in NFS Carbon
+### Proof-of-concept implementation in NFS Carbon
 * Use [Watto Game Extractor](http://www.watto.org/game_extractor.html) (free version) to unpack `bootbundle.viv` into a folder.
     * The extractor will decompress it into `bootbundle_ge_decompressed.viv`, then complain that "No plugins were able to open the archive".
     * Open `bootbundle_ge_decompressed.viv`, it should work just fine.
@@ -75,13 +75,10 @@ In these games the `trackinfo` stored directly in the ISO is not used. The file 
 
 Unlike NFS Underground Rivals, Carbon may crap itself if you already have a savegame with a different number of songs.
 
-## Observations so far
+### Observations so far
 * .viv files can be decompressed, but I haven't found a free utility that can compress them again.
 * Compression scheme is probably *not* Refpack.
 * Decompressed .viv files are in EA BIGF format.
 * `bootbundle.viv` *must* be compressed, otherwise the game crashes trying to load it.
 * Contents of .viv files can be unpacked into the ISO and the game will run just fine reading "unbundled" files.
 * Modifying the game's code is another way of circumventing this overlay. You can change a string in the game's code to, say, `trackinf` and put a `trackinf` file into the ISO. The problem is that the game's executable must be decrypted for the modification and a real PSP will refuse to run unencrypted executable files.
-
-# Why?
-I ask myself that question every day.
